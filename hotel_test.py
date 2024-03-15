@@ -30,6 +30,14 @@ class TestRoom(unittest.TestCase):
         self.booking2 = self.room.book(datetime(2021, 1, 20), datetime(2021, 1, 30))
         self.booking3 = self.room2.book(datetime(2021, 1, 10), datetime(2021, 1, 30))
 
+    def test_book(self):
+        """Books a room for a date range"""
+        book = self.room.book(datetime(2021, 1, 12), datetime(2021, 1, 15))
+        self.assertIn(book, self.room.bookings())
+
+        with self.assertRaises(ValueError):
+            self.room.book(datetime(2021, 1, 5), datetime(2021, 1, 8))
+
     def test_bookings(self):
         """Returns bookings for the room"""
         self.assertEqual(self.room.bookings(), [self.booking, self.booking2])

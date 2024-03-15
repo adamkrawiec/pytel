@@ -57,6 +57,8 @@ class Room:
         return [booking for booking in Booking.bookings if booking.room == self]
   
     def book(self, start, end):
+        if self.is_booked_between(start, end):
+            raise ValueError("Room is already booked for this date range")
         return Booking(self, start, end)
   
     def is_booked_between(self, start, end):
