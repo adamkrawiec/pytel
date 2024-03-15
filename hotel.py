@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+from datetimerange import DateTimeRange
+
 class Hotel:
     id = 0
     def __init__(self, name):
@@ -13,6 +16,9 @@ class Hotel:
 
     def rooms(self):
         return [room for room in Room.rooms if room.hotel == self]
+
+    def rooms_available(self, start, end):
+        return [room for room in self.rooms() if not room.is_booked_between(start, end)]
 
 
 # class RoomRepository(object):
@@ -47,6 +53,23 @@ class Room:
         self.id = Room.id
         Room.rooms.append(self)
     
+    def bookings(self):
+        return [booking for booking in Booking.bookings if booking.room == self]
+  
+    def book(self, start, end):
+        return Booking(self, start, end)
+  
+    def is_booked_between(self, start, end):
+        date_range = DateTimeRange(start, end).range(timedelta(days=1))
+        return any(
+          self.is_booked_on(date) for date in date_range
+        )
+    
+    def is_booked_on(self, date):
+        return any(
+          date in booking.period for booking in self.bookings()
+        )
+
     def __str__(self):
         return f"hotel: {self.hotel} id: {self.id}"
 
@@ -62,6 +85,7 @@ class Booking:
         self.room = room
         self.start = start
         self.end = end
+        self.period = DateTimeRange(self.start, self.end)
         Booking.id += 1
         self.id = Booking.id
         Booking.bookings.append(self)
