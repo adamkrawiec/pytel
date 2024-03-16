@@ -1,0 +1,20 @@
+name: Run unit tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  unit-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install packages
+        run: pip3 install -r requirements.txt
+      - name: Run tests
+        run: python3 *_test.py
