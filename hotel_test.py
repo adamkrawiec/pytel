@@ -1,14 +1,16 @@
 import unittest
-import hotel
+from hotel.hotel import Hotel
+from hotel.room import Room
+from hotel.booking import Booking
 from datetime import datetime
 
 class TestHotel(unittest.TestCase):
     def setUp(self):
-        self.hotel = hotel.Hotel("Ritz")
-        self.hotel2 = hotel.Hotel("Hilton")
-        self.room = hotel.Room(self.hotel)
-        self.room2 = hotel.Room(self.hotel)
-        self.room3 = hotel.Room(self.hotel2)
+        self.hotel = Hotel("Ritz")
+        self.hotel2 = Hotel("Hilton")
+        self.room = Room(self.hotel, 100)
+        self.room2 = Room(self.hotel, 200)
+        self.room3 = Room(self.hotel2, 200)
         self.booking = self.room.book(datetime(2021, 1, 1), datetime(2021, 1, 10))
         self.booking2 = self.room.book(datetime(2021, 1, 20), datetime(2021, 1, 30))
         self.booking3 = self.room2.book(datetime(2021, 1, 10), datetime(2021, 1, 30))
@@ -23,9 +25,9 @@ class TestHotel(unittest.TestCase):
 
 class TestRoom(unittest.TestCase):
     def setUp(self):
-        self.hotel = hotel.Hotel("Ritz")
-        self.room = hotel.Room(self.hotel)
-        self.room2 = hotel.Room(self.hotel)
+        self.hotel = Hotel("Ritz")
+        self.room = Room(self.hotel, 100)
+        self.room2 = Room(self.hotel, 200)
         self.booking = self.room.book(datetime(2021, 1, 1), datetime(2021, 1, 10))
         self.booking2 = self.room.book(datetime(2021, 1, 20), datetime(2021, 1, 30))
         self.booking3 = self.room2.book(datetime(2021, 1, 10), datetime(2021, 1, 30))
@@ -52,6 +54,14 @@ class TestRoom(unittest.TestCase):
         self.assertTrue(self.room.is_booked_between(datetime(2021, 1, 2), datetime(2021, 1, 5)))
         self.assertTrue(self.room.is_booked_between(datetime(2021, 1, 2), datetime(2021, 1, 15)))
         self.assertFalse(self.room.is_booked_between(datetime(2021, 1, 12), datetime(2021, 1, 15)))
+
+class TestBooking(unittest.TestCase):
+    def setUp(self):
+        self.booking = Booking(Room(Hotel("Ritz"), 10), datetime(2021, 1, 1), datetime(2021, 1, 10))
+
+    def test_price(self):
+        """Returns the price of the booking"""
+        self.assertEqual(self.booking.price(), 100)
 
 if __name__ == '__main__':
     unittest.main()
