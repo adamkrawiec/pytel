@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from datetimerange import DateTimeRange
-from hotel.booking import Booking
+from hotel.booking import Booking, BookingRepository
 
 class Room:
     id = 0
@@ -18,12 +18,12 @@ class Room:
         Room.rooms.append(self)
     
     def bookings(self):
-        return [booking for booking in Booking.bookings if booking.room == self]
+        return [booking for booking in BookingRepository().all() if booking.room == self]
   
     def book(self, start, end):
         if self.is_booked_between(start, end):
             raise ValueError("Room is already booked for this date range")
-        return Booking(self, start, end)
+        return Booking(self, start, end).save()
   
     def is_booked_between(self, start, end):
         date_range = DateTimeRange(start, end).range(timedelta(days=1))
