@@ -1,12 +1,12 @@
 import unittest
 from hotel.hotel import Hotel
 from hotel.room import Room
-from hotel.booking import Booking, BookingRepository
+from hotel.booking import BookingCreator, BookingRepository
 from datetime import datetime
 
 class TestBooking(unittest.TestCase):
     def setUp(self):
-        self.booking = Booking(Room(Hotel("Ritz"), 10), datetime(2021, 1, 1), datetime(2021, 1, 10))
+        self.booking = BookingCreator(Room(Hotel("Ritz"), 10), datetime(2021, 1, 1), datetime(2021, 1, 10)).create()
 
     def tearDown(self):
         BookingRepository().delete_all()

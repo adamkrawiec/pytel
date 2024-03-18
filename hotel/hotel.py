@@ -18,11 +18,3 @@ class Hotel:
 
     def rooms_available(self, start, end):
         return [room for room in self.rooms() if not room.is_booked_between(start, end)]
-
-# from hotel.booking import Booking
-# from hotel.hotel import Hotel
-# from hotel.room import Room
-# import datetime
-# h = Hotel("ritz")
-# r = Room(h, 100)
-# b = Booking(r, datetime.datetime(2021, 1, 1), datetime.datetime(2021, 1, 10))
