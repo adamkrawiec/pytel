@@ -1,7 +1,7 @@
 import unittest
 from hotel.hotel import Hotel
 from hotel.room import Room
-from hotel.booking import Booking, BookingRepository
+from hotel.booking import BookingRepository
 from datetime import datetime
 
 class TestHotel(unittest.TestCase):

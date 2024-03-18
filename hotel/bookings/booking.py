@@ -1,6 +1,11 @@
 from datetimerange import DateTimeRange
 from .booking_price_calculator import BookingPriceCalculator
-from .booking_repository import BookingRepository
+from enum import Enum
+
+class BookingStatus(Enum):
+    PENDING = 1
+    CONFIRMED = 2
+    CANCELED = 3
 
 class Booking:
     def __init__(self, room, start, end):
@@ -9,10 +14,17 @@ class Booking:
         self.end = end
         self.period = DateTimeRange(self.start, self.end)
         self.id = None
+        self.status = BookingStatus.PENDING
 
-    def save(self):
-        self.id = BookingRepository().persist(self).id
-        return self
+    @property
+    def status(self):
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        if not isinstance(value, BookingStatus):
+            raise ValueError("status must be a BookingStatus")
+        self._status = value
 
     def price(self):
         return BookingPriceCalculator(self.room.price_day, self.period).calculate()
